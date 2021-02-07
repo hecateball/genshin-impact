@@ -1,12 +1,7 @@
 <template>
-  <Character />
-  <Weapon />
-  <h3>聖遺物</h3>
-  <h4>花</h4>
-  <h4>羽</h4>
-  <h4>砂</h4>
-  <h4>盃</h4>
-  <h4>冠</h4>
+  <Character class="mt-2" />
+  <Weapon class="mt-2" />
+  <Artifacts class="mt-2" />
   <h3>敵の状態</h3>
   <DamageChart />
 </template>
@@ -17,12 +12,14 @@ import { provideCharacter } from '~/composables/character'
 import { provideWeapon } from '~/composables/equipments/weapon'
 import Character from '~/components/Character.vue'
 import Weapon from '~/components/Weapon.vue'
+import Artifacts from '~/components/Artifacts.vue'
 import DamageChart from '~/components/DamageChart.vue'
 
 export default defineComponent({
   components: {
     Character,
     Weapon,
+    Artifacts,
     DamageChart,
   },
   setup: () => {

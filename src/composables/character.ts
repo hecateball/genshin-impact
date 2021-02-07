@@ -15,26 +15,18 @@ type Character = {
 const Key: InjectionKey<Ref<Character>> = Symbol()
 
 const converter: firebase.firestore.FirestoreDataConverter<Character> = {
-  fromFirestore(snapshot: firebase.firestore.QueryDocumentSnapshot) {
-    return {
-      name: snapshot.get('name'),
-      ascensionPhase: snapshot.get('ascensionPhase'),
-      level: snapshot.get('level'),
-      ATK: baseATK(snapshot.get('name'), snapshot.get('ascensionPhase'), snapshot.get('level')),
-      specializedStats: {
-        type: specializeStatsType(snapshot.get('name')),
-        value: specializedStatsValue(specializeStatsType(snapshot.get('name')), snapshot.get('ascensionPhase')),
-      },
-    }
-  },
-  toFirestore(character: Character) {
-    return {
-      name: character.name,
-      ascensionPhase: character.ascensionPhase,
-      level: character.level,
-      specializedStatsType: character.specializedStats.type,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    }
+  fromFirestore: (snapshot) => ({
+    name: snapshot.get('name'),
+    ascensionPhase: snapshot.get('ascensionPhase'),
+    level: snapshot.get('level'),
+    ATK: baseATK(snapshot.get('name'), snapshot.get('ascensionPhase'), snapshot.get('level')),
+    specializedStats: {
+      type: specializeStatsType(snapshot.get('name')),
+      value: specializedStatsValue(specializeStatsType(snapshot.get('name')), snapshot.get('ascensionPhase')),
+    },
+  }),
+  toFirestore: () => {
+    throw new ReferenceError()
   },
 }
 
@@ -131,28 +123,22 @@ export const useCharacter = () => {
 
 export const useCharacters = () => {
   const characters = ref<Character[]>([])
-  const reference = firebase
-    .firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser!.uid)
-    .collection('characters')
+  const reference = firebase.firestore().collection('users').doc(firebase.auth().currentUser!.uid).collection('characters')
+  const unsubscribe = reference
     .withConverter(converter)
-  const unsubscribe = reference.orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-    characters.value = snapshot.docs.map((doc) => doc.data())
-    if (characters.value.length !== 0) {
-      return
-    }
-    reference.doc('Ganyu').set({
-      name: 'Ganyu',
-      ascensionPhase: 0,
-      level: 1,
-      ATK: baseATK('Ganyu', 0, 1),
-      specializedStats: {
-        type: specializeStatsType('Ganyu'),
-        value: specializedStatsValue(specializeStatsType('Ganyu'), 0),
-      },
+    .orderBy('createdAt', 'desc')
+    .onSnapshot(async (snapshot) => {
+      characters.value = snapshot.docs.map((doc) => doc.data())
+      if (characters.value.length !== 0) {
+        return
+      }
+      await reference.doc('Ganyu').set({
+        name: 'Ganyu',
+        ascensionPhase: 0,
+        level: 1,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
     })
-  })
   onBeforeUnmount(unsubscribe)
   return { characters }
 }
@@ -168,23 +154,18 @@ export const useCreateCharacter = () => {
     level: 90,
   })
   const createCharacter = async () => {
-    const reference = firebase
+    await firebase
       .firestore()
       .collection('users')
       .doc(firebase.auth().currentUser!.uid)
       .collection('characters')
       .doc(input.name)
-      .withConverter(converter)
-    await reference.set({
-      name: input.name,
-      ascensionPhase: input.ascensionPhase,
-      level: input.level,
-      ATK: baseATK(input.name, input.ascensionPhase, input.level),
-      specializedStats: {
-        type: specializeStatsType(input.name),
-        value: specializedStatsValue(specializeStatsType(input.name), input.ascensionPhase),
-      },
-    })
+      .set({
+        name: input.name,
+        ascensionPhase: input.ascensionPhase,
+        level: input.level,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
     input.name = 'Ganyu'
     input.ascensionPhase = 6
     input.level = 90

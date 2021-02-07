@@ -11,11 +11,11 @@
         <th>ステータス値</th>
       </tr>
       <tr class="text-center border" v-for="character in characters">
-        <td>{{ character.name }}</td>
+        <td>{{ formatName(character.name) }}</td>
         <td>{{ character.ascensionPhase }}</td>
         <td>{{ character.level }}</td>
         <td>{{ character.ATK }}</td>
-        <td>{{ character.specializedStats.type }}</td>
+        <td>{{ formatStatType(character.specializedStats.type) }}</td>
         <td>{{ character.specializedStats.value }}</td>
       </tr>
     </table>
@@ -56,11 +56,14 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import { useCharacters, useCreateCharacter } from '~/composables/character'
+import { useFormatName, useFormatStatType } from '~/composables/formatter'
 
 export default defineComponent({
   setup: () => {
     const { characters } = useCharacters()
     const { createCharacter, input } = useCreateCharacter()
+    const { formatName } = useFormatName()
+    const { formatStatType } = useFormatStatType()
     const setLevel = () => {
       switch (input.ascensionPhase) {
         case 6:
@@ -89,6 +92,8 @@ export default defineComponent({
     return {
       characters,
       createCharacter,
+      formatName,
+      formatStatType,
       setLevel,
       ...toRefs(input),
     }
