@@ -47,6 +47,7 @@ const baseATK = (name: CharacterName, ascensionPhase: CharacterAscensionPhase, l
         case 1:
           return level === 40 ? 135 : 90
         case 0:
+        default:
           return level === 20 ? 68 : 28
       }
     default:
@@ -78,6 +79,7 @@ const specializedStatsValue = (type: StatType, ascensionPhase: CharacterAscensio
           return 9.6
         case 1:
         case 0:
+        default:
           return 0
       }
     default:
