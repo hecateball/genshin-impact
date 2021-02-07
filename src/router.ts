@@ -5,6 +5,11 @@ export const router = createRouter({
   routes: [
     { path: '/', name: 'index', component: () => import('~/pages/Index.vue') },
     {
+      path: '/characters',
+      name: 'characters',
+      component: () => import('~/pages/characters/Index.vue'),
+    },
+    {
       path: '/weapons',
       name: 'weapons',
       component: () => import('~/pages/weapons/Index.vue'),

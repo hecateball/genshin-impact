@@ -7,7 +7,8 @@
   <h4>砂</h4>
   <h4>盃</h4>
   <h4>冠</h4>
-  <Damage />
+  <h3>敵の状態</h3>
+  <DamageChart />
 </template>
 
 <script lang="ts">
@@ -16,13 +17,13 @@ import { provideCharacter } from '~/composables/character'
 import { provideWeapon } from '~/composables/equipments/weapon'
 import Character from '~/components/Character.vue'
 import Weapon from '~/components/Weapon.vue'
-import Damage from '~/components/Damage.vue'
+import DamageChart from '~/components/DamageChart.vue'
 
 export default defineComponent({
   components: {
     Character,
     Weapon,
-    Damage,
+    DamageChart,
   },
   setup: () => {
     provideCharacter()

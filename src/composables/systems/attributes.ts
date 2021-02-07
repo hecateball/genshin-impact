@@ -2,18 +2,13 @@ import { computed } from 'vue'
 import { useCharacter } from '~/composables/character'
 import { useWeapon } from '~/composables/equipments/weapon'
 
-const summationReducer: (
-  previousValue: number,
-  currentValue: number
-) => number = (previousValue, currentValue) => previousValue + currentValue
+const summationReducer: (previousValue: number, currentValue: number) => number = (previousValue, currentValue) =>
+  previousValue + currentValue
 
 export const useAttack = () => {
   const { character } = useCharacter()
   const { weapon } = useWeapon()
-  const subStats = [
-    character.value.specializedStats,
-    weapon.value.secondaryStat,
-  ]
+  const subStats = [character.value.specializedStats, weapon.value.secondaryStat]
   const attack = computed<number>(() => {
     const ATKBonus = subStats
       .filter((stat) => stat.type === 'ATK%')
@@ -23,10 +18,7 @@ export const useAttack = () => {
       .filter((stat) => stat.type === 'ATK')
       .map((stat) => stat.value)
       .reduce(summationReducer, 0)
-    return (
-      Math.floor((character.value.ATK + weapon.value.ATK) * ATKBonus) +
-      ATKFlatBonus
-    )
+    return Math.floor((character.value.ATK + weapon.value.ATK) * ATKBonus) + ATKFlatBonus
   })
   return { attack }
 }
@@ -39,9 +31,15 @@ export const useCriticalRate = () => {
 }
 
 export const useCriticalDamageRate = () => {
-  const criticalDamageRate = computed<number>(() => {
-    return 150 / 100
-  })
+  const { character } = useCharacter()
+  const { weapon } = useWeapon()
+  const subStats = [character.value.specializedStats, weapon.value.secondaryStat]
+  const criticalDamageRate = computed<number>(() =>
+    subStats
+      .filter((stat) => stat.type === 'CRITICAL_DAMAGE')
+      .map((stat) => stat.value / 100)
+      .reduce(summationReducer, 1.5)
+  )
   return { criticalDamageRate }
 }
 

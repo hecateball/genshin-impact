@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/analytics'
+import 'firebase/firestore'
 import { createApp } from 'vue'
 import { router } from '~/router'
 import GenshinImpact from '~/GenshinImpact.vue'
@@ -26,10 +27,14 @@ router.beforeEach(async () => {
       resolve(user)
     })
   })
-  if (currentUser === null) {
-    const credential = await firebase.auth().signInAnonymously()
-    console.log('user: ', credential.user?.uid)
+  if (currentUser !== null) {
+    return
   }
+  const credential = await firebase.auth().signInAnonymously()
+  await firebase.firestore().collection('users').doc(credential.user!.uid).set({
+    displayName: 'Guest',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  })
 })
 
 createApp(GenshinImpact).use(router).mount('#app')

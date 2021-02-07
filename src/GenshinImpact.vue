@@ -5,6 +5,7 @@
       <nav>
         <ul>
           <li><RouterLink :to="{ name: 'index' }">Index</RouterLink></li>
+          <li><RouterLink :to="{ name: 'characters' }">Characters</RouterLink></li>
           <li><RouterLink :to="{ name: 'weapons' }">Weapons</RouterLink></li>
         </ul>
       </nav>
@@ -21,4 +22,8 @@ import { defineComponent } from 'vue'
 export default defineComponent({})
 </script>
 
-<style></style>
+<style>
+.container {
+  @apply max-w-screen-xl min-h-screen mx-auto;
+}
+</style>
