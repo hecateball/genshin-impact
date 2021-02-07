@@ -1,4 +1,9 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import { firebaseInit } from '~/plugins/firebase'
+import { router } from '~/router'
+import GenshinImpact from '~/GenshinImpact.vue'
 
-createApp(App).mount('#app')
+createApp(GenshinImpact)
+  .use(firebaseInit)
+  .use(router)
+  .mount('#app')
