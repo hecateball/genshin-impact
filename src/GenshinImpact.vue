@@ -10,11 +10,7 @@
       </nav>
     </header>
     <main>
-      <Suspense>
-        <template #default>
-          <RouterView />
-        </template>
-      </Suspense>
+      <RouterView />
     </main>
   </div>
 </template>

@@ -1,19 +1,18 @@
 import { ref, computed, provide, inject, Ref, InjectionKey } from 'vue'
+import type { Stat, StatType } from '~/composables/types'
 
 type WeaponName = 'アモスの弓'
 type Level = 1 | 20 | 40 | 50 | 60 | 70 | 80 | 90
 type AscensionPhase = 0 | 1 | 2 | 3 | 4 | 5 | 6
 type WeaponRefinement = 1 | 2 | 3 | 4 | 5
-type SecondaryStatType = 'ATK%'
 
 type Weapon = {
   name: WeaponName
   level: Level
   ascensionPhase: AscensionPhase
   weaponRefinement: WeaponRefinement
-  baseATK: number
-  secondaryStatType: SecondaryStatType
-  secondaryStat: number
+  ATK: number
+  secondaryStat: Stat
 }
 
 const Key: InjectionKey<Ref<Weapon>> = Symbol()
@@ -27,9 +26,11 @@ export const provideWeapon = () => {
     level: level.value,
     ascensionPhase: ascensionPhase.value,
     weaponRefinement: 1,
-    secondaryStatType: 'ATK%',
-    baseATK: baseATK(name.value, ascensionPhase.value, level.value),
-    secondaryStat: secondaryStat('ATK%', level.value),
+    ATK: baseATK(name.value, ascensionPhase.value, level.value),
+    secondaryStat: {
+      type: 'ATK%',
+      value: secondaryStatValue('ATK%', level.value),
+    },
   }))
   provide(Key, weapon)
 }
@@ -71,8 +72,8 @@ const baseATK = (
   }
 }
 
-const secondaryStat = (secondaryStatType: SecondaryStatType, level: Level) => {
-  switch (secondaryStatType) {
+const secondaryStatValue = (type: StatType, level: Level) => {
+  switch (type) {
     case 'ATK%':
       switch (level) {
         case 90:

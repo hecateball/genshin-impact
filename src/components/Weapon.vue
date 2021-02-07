@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useWeapon } from '../composables/weapon'
+import { useWeapon } from '../composables/equipments/weapon'
 
 export default defineComponent({
   setup: () => {
