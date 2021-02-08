@@ -3,6 +3,7 @@ import type { StatType } from '~/composables/types'
 
 export const CHARACTER_MASTER: {
   [name in Name]: {
+    weaponType: string
     attack: {
       [phase in AscensionPhase]: { [level in Level]?: number }
     }
@@ -13,6 +14,7 @@ export const CHARACTER_MASTER: {
   }
 } = {
   Ganyu: {
+    weaponType: 'Bow',
     attack: {
       '0': { '1': 28, '20': 68 },
       '1': { '20': 90, '40': 135 },

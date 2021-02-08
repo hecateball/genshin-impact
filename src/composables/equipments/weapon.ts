@@ -1,13 +1,16 @@
-import { ref, computed, provide, inject, Ref, InjectionKey } from 'vue'
-import type { Stat, StatType } from '~/composables/types'
+import { ref, provide, inject, Ref, InjectionKey } from 'vue'
+import type { Stat } from '~/composables/types'
+import { WEAPON_MASTER } from '~/assets/weapon-master'
 
-type WeaponName = 'アモスの弓'
-type Level = 1 | 20 | 40 | 50 | 60 | 70 | 80 | 90
-type AscensionPhase = 0 | 1 | 2 | 3 | 4 | 5 | 6
+export type Name = 'AmosBow'
+export type WeaponType = 'Bows' | 'Catalysts' | 'Claymores' | 'Polearms' | 'Swords'
+export type Level = 1 | 20 | 40 | 50 | 60 | 70 | 80 | 90
+export type AscensionPhase = 0 | 1 | 2 | 3 | 4 | 5 | 6
 type WeaponRefinement = 1 | 2 | 3 | 4 | 5
 
 type Weapon = {
-  name: WeaponName
+  name: Name
+  type: WeaponType
   level: Level
   ascensionPhase: AscensionPhase
   weaponRefinement: WeaponRefinement
@@ -15,81 +18,40 @@ type Weapon = {
   secondaryStat: Stat
 }
 
-const Key: InjectionKey<Ref<Weapon>> = Symbol()
+const Value: InjectionKey<Ref<Weapon>> = Symbol()
+const Setter: InjectionKey<(value: Weapon) => void> = Symbol()
 
 export const provideWeapon = () => {
-  const name = ref<WeaponName>('アモスの弓')
-  const level = ref<Level>(90)
-  const ascensionPhase = ref<AscensionPhase>(6)
-  const weapon = computed<Weapon>(() => ({
-    name: name.value,
-    level: level.value,
-    ascensionPhase: ascensionPhase.value,
+  const name = 'AmosBow'
+  const weapon = ref<Weapon>({
+    name,
+    type: WEAPON_MASTER[name].type,
+    level: 90,
+    ascensionPhase: 6,
     weaponRefinement: 1,
-    ATK: baseATK(name.value, ascensionPhase.value, level.value),
+    ATK: WEAPON_MASTER[name].attack['6']['90']!,
     secondaryStat: {
-      type: 'ATTACK_PERCENT',
-      value: secondaryStatValue('ATTACK_PERCENT', level.value),
+      type: WEAPON_MASTER[name].secondaryStatType,
+      value: WEAPON_MASTER[name].secondaryStatValue['90'],
     },
-  }))
-  provide(Key, weapon)
+  })
+  const setWeapon = (value: Weapon) => {
+    weapon.value = value
+  }
+  provide(Value, weapon)
+  provide(Setter, setWeapon)
 }
 
 export const useWeapon = () => {
-  const weapon = inject(Key)
-  if (weapon === undefined) {
+  const weapon = inject(Value)
+  const setWeapon = inject(Setter)
+  if (weapon === undefined || setWeapon === undefined) {
     throw new Error()
   }
-  return { weapon }
+  return { weapon, setWeapon }
 }
 
-const baseATK = (name: WeaponName, ascensionPhase: AscensionPhase, level: Level) => {
-  switch (name) {
-    // 星5 Lv1 46武器
-    case 'アモスの弓':
-      switch (ascensionPhase) {
-        case 6:
-          return level === 90 ? 608 : 563
-        case 5:
-          return level === 80 ? 532 : 488
-        case 4:
-          return level === 70 ? 457 : 414
-        case 3:
-          return level === 60 ? 382 : 340
-        case 2:
-          return level === 50 ? 308 : 266
-        case 1:
-          return level === 40 ? 235 : 153
-        case 0:
-          return level === 20 ? 122 : 46
-      }
-    default:
-      return 0
-  }
-}
-
-const secondaryStatValue = (type: StatType, level: Level) => {
-  switch (type) {
-    case 'ATTACK_PERCENT':
-      switch (level) {
-        case 90:
-          return 49.6
-        case 80:
-          return 45.3
-        case 70:
-          return 40.9
-        case 60:
-          return 36.5
-        case 50:
-          return 32.2
-        case 40:
-          return 27.8
-        case 20:
-          return 19.1
-        case 1:
-          return 10.8
-      }
-    default:
-      return 0
-  }
+export const useWeapons = () => {
+  const weapons = ref<Weapon[]>([])
+  return { weapons }
 }

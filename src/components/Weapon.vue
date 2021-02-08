@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h1>武器: {{ weapon.name }}</h1>
+    <h1>武器: {{ $t(`weapons.${weapon.name}`) }}</h1>
     <table>
       <thead>
         <tr>
