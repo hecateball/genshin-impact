@@ -1,10 +1,11 @@
+import { createApp } from 'vue'
+import { i18n } from '~/i18n'
+import { router } from '~/router'
+import GenshinImpact from '~/GenshinImpact.vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/analytics'
 import 'firebase/firestore'
-import { createApp } from 'vue'
-import { router } from '~/router'
-import GenshinImpact from '~/GenshinImpact.vue'
 import '~/assets/index.css'
 
 if (firebase.apps.length === 0) {
@@ -37,4 +38,4 @@ router.beforeEach(async () => {
   })
 })
 
-createApp(GenshinImpact).use(router).mount('#app')
+createApp(GenshinImpact).use(i18n).use(router).mount('#app')

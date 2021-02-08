@@ -28,8 +28,8 @@ export const provideWeapon = () => {
     weaponRefinement: 1,
     ATK: baseATK(name.value, ascensionPhase.value, level.value),
     secondaryStat: {
-      type: 'ATK%',
-      value: secondaryStatValue('ATK%', level.value),
+      type: 'ATTACK_PERCENT',
+      value: secondaryStatValue('ATTACK_PERCENT', level.value),
     },
   }))
   provide(Key, weapon)
@@ -43,11 +43,7 @@ export const useWeapon = () => {
   return { weapon }
 }
 
-const baseATK = (
-  name: WeaponName,
-  ascensionPhase: AscensionPhase,
-  level: Level
-) => {
+const baseATK = (name: WeaponName, ascensionPhase: AscensionPhase, level: Level) => {
   switch (name) {
     // 星5 Lv1 46武器
     case 'アモスの弓':
@@ -74,7 +70,7 @@ const baseATK = (
 
 const secondaryStatValue = (type: StatType, level: Level) => {
   switch (type) {
-    case 'ATK%':
+    case 'ATTACK_PERCENT':
       switch (level) {
         case 90:
           return 49.6

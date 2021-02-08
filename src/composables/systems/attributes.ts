@@ -11,11 +11,11 @@ export const useAttack = () => {
   const subStats = [character.value.specializedStats, weapon.value.secondaryStat]
   const attack = computed<number>(() => {
     const ATKBonus = subStats
-      .filter((stat) => stat.type === 'ATK%')
+      .filter((stat) => stat.type === 'ATTACK_PERCENT')
       .map((stat) => stat.value / 100)
       .reduce(summationReducer, 1.0)
     const ATKFlatBonus = subStats
-      .filter((stat) => stat.type === 'ATK')
+      .filter((stat) => stat.type === 'ATTACK_FLAT')
       .map((stat) => stat.value)
       .reduce(summationReducer, 0)
     return Math.floor((character.value.ATK + weapon.value.ATK) * ATKBonus) + ATKFlatBonus

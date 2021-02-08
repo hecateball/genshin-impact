@@ -11,11 +11,11 @@
         <th>ステータス値</th>
       </tr>
       <tr class="text-center border" v-for="character in characters">
-        <td>{{ formatName(character.name) }}</td>
+        <td>{{ $t(`characters.${character.name}`) }}</td>
         <td>{{ character.ascensionPhase }}</td>
         <td>{{ character.level }}</td>
         <td>{{ character.ATK }}</td>
-        <td>{{ formatStatType(character.specializedStats.type) }}</td>
+        <td>{{ $t(`stats.${character.specializedStats.type}`) }}</td>
         <td>{{ character.specializedStats.value }}</td>
       </tr>
     </table>
@@ -25,7 +25,7 @@
     <form @submit.prevent="createCharacter">
       <label for="name">名前</label>
       <select id="name" v-model="name">
-        <option value="Ganyu">甘雨</option>
+        <option v-for="name in charactersMaster" :value="name">{{ $t(`characters.${name}`) }}</option>
       </select>
       <label for="ascensionPhase">覚醒段階</label>
       <select id="ascensionPhase" v-model.number="ascensionPhase" @change="setLevel">
@@ -60,6 +60,7 @@ import { useFormatName, useFormatStatType } from '~/composables/formatter'
 
 export default defineComponent({
   setup: () => {
+    const charactersMaster = ['Ganyu']
     const { characters } = useCharacters()
     const { createCharacter, input } = useCreateCharacter()
     const { formatName } = useFormatName()
@@ -90,10 +91,9 @@ export default defineComponent({
       }
     }
     return {
+      charactersMaster,
       characters,
       createCharacter,
-      formatName,
-      formatStatType,
       setLevel,
       ...toRefs(input),
     }
