@@ -7,15 +7,15 @@
           <th>覚醒段階</th>
           <th>レベル</th>
           <th>攻撃力</th>
-          <th>{{ $t(`stats.${character.specializedStats.type}`) }}</th>
+          <th>{{ $t(`stats.${character.specializedStat.type}`) }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>{{ character.ascensionPhase }}</td>
           <td>{{ character.level }}</td>
-          <td>{{ character.ATK }}</td>
-          <td>{{ character.specializedStats.value }}</td>
+          <td>{{ character.attack }}</td>
+          <td>{{ character.specializedStat.value }}</td>
         </tr>
       </tbody>
     </table>

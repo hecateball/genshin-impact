@@ -17,9 +17,9 @@
           <td>{{ $t(`characters.${character.name}`) }}</td>
           <td>{{ character.ascensionPhase }}</td>
           <td>{{ character.level }}</td>
-          <td>{{ character.ATK }}</td>
-          <td>{{ $t(`stats.${character.specializedStats.type}`) }}</td>
-          <td>{{ character.specializedStats.value }}</td>
+          <td>{{ character.attack }}</td>
+          <td>{{ $t(`stats.${character.specializedStat.type}`) }}</td>
+          <td>{{ character.specializedStat.value }}</td>
         </tr>
       </tbody>
     </table>
@@ -29,7 +29,7 @@
     <form @submit.prevent="createCharacter">
       <label for="name">名前</label>
       <select id="name" v-model="name">
-        <option v-for="name in charactersMaster" :value="name">{{ $t(`characters.${name}`) }}</option>
+        <option v-for="name in characterNames" :value="name">{{ $t(`characters.${name}`) }}</option>
       </select>
       <label for="ascensionPhase">覚醒段階</label>
       <select id="ascensionPhase" v-model.number="ascensionPhase" @change="setLevel">
@@ -60,10 +60,11 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import { useCharacters, useCreateCharacter } from '~/composables/character'
+import { CHARACTER_MASTER } from '~/assets/character-master'
 
 export default defineComponent({
   setup: () => {
-    const charactersMaster = ['Ganyu']
+    const characterNames = Object.keys(CHARACTER_MASTER)
     const { characters } = useCharacters()
     const { createCharacter, input } = useCreateCharacter()
     const setLevel = () => {
@@ -92,7 +93,7 @@ export default defineComponent({
       }
     }
     return {
-      charactersMaster,
+      characterNames,
       characters,
       createCharacter,
       setLevel,

@@ -8,7 +8,7 @@ const summationReducer: (previousValue: number, currentValue: number) => number 
 export const useAttack = () => {
   const { character } = useCharacter()
   const { weapon } = useWeapon()
-  const subStats = [character.value.specializedStats, weapon.value.secondaryStat]
+  const subStats = [character.value.specializedStat, weapon.value.secondaryStat]
   const attack = computed<number>(() => {
     const ATKBonus = subStats
       .filter((stat) => stat.type === 'ATTACK_PERCENT')
@@ -18,7 +18,7 @@ export const useAttack = () => {
       .filter((stat) => stat.type === 'ATTACK_FLAT')
       .map((stat) => stat.value)
       .reduce(summationReducer, 0)
-    return Math.floor((character.value.ATK + weapon.value.ATK) * ATKBonus) + ATKFlatBonus
+    return Math.floor((character.value.attack + weapon.value.ATK) * ATKBonus) + ATKFlatBonus
   })
   return { attack }
 }
@@ -33,7 +33,7 @@ export const useCriticalRate = () => {
 export const useCriticalDamageRate = () => {
   const { character } = useCharacter()
   const { weapon } = useWeapon()
-  const subStats = [character.value.specializedStats, weapon.value.secondaryStat]
+  const subStats = [character.value.specializedStat, weapon.value.secondaryStat]
   const criticalDamageRate = computed<number>(() =>
     subStats
       .filter((stat) => stat.type === 'CRITICAL_DAMAGE')
