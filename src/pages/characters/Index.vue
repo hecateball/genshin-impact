@@ -1,23 +1,27 @@
 <template>
   <section>
     <h1>キャラクター一覧</h1>
-    <table class="scrollable-table">
-      <tr class="text-center border">
-        <th>名前</th>
-        <th>覚醒段階</th>
-        <th>レベル</th>
-        <th>攻撃力</th>
-        <th>固有ステータス</th>
-        <th>ステータス値</th>
-      </tr>
-      <tr class="text-center border" v-for="character in characters">
-        <td>{{ $t(`characters.${character.name}`) }}</td>
-        <td>{{ character.ascensionPhase }}</td>
-        <td>{{ character.level }}</td>
-        <td>{{ character.ATK }}</td>
-        <td>{{ $t(`stats.${character.specializedStats.type}`) }}</td>
-        <td>{{ character.specializedStats.value }}</td>
-      </tr>
+    <table>
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>覚醒段階</th>
+          <th>レベル</th>
+          <th>攻撃力</th>
+          <th>固有ステータス</th>
+          <th>ステータス値</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="character in characters">
+          <td>{{ $t(`characters.${character.name}`) }}</td>
+          <td>{{ character.ascensionPhase }}</td>
+          <td>{{ character.level }}</td>
+          <td>{{ character.ATK }}</td>
+          <td>{{ $t(`stats.${character.specializedStats.type}`) }}</td>
+          <td>{{ character.specializedStats.value }}</td>
+        </tr>
+      </tbody>
     </table>
   </section>
   <section>
@@ -56,15 +60,12 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue'
 import { useCharacters, useCreateCharacter } from '~/composables/character'
-import { useFormatName, useFormatStatType } from '~/composables/formatter'
 
 export default defineComponent({
   setup: () => {
     const charactersMaster = ['Ganyu']
     const { characters } = useCharacters()
     const { createCharacter, input } = useCreateCharacter()
-    const { formatName } = useFormatName()
-    const { formatStatType } = useFormatStatType()
     const setLevel = () => {
       switch (input.ascensionPhase) {
         case 6:
@@ -100,11 +101,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style>
-.scrollable-table {
-  @apply table-fixed border w-full;
-  overflow: auto;
-  white-space: nowrap;
-}
-</style>

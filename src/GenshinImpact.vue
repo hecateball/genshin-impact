@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div>
     <header>
-      <span>原神計算機</span>
+      <h1>原神計算機</h1>
       <nav>
         <ul>
           <li><RouterLink :to="{ name: 'index' }">Index</RouterLink></li>
@@ -21,9 +21,3 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({})
 </script>
-
-<style>
-.container {
-  @apply max-w-screen-xl min-h-screen mx-auto;
-}
-</style>

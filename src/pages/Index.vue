@@ -1,7 +1,7 @@
 <template>
-  <Character class="mt-2" />
-  <Weapon class="mt-2" />
-  <Artifacts class="mt-2" />
+  <Character />
+  <Weapon />
+  <Artifacts />
   <h3>敵の状態</h3>
   <DamageChart />
 </template>
